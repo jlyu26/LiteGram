@@ -24,4 +24,18 @@ Unlike normal loaded JavaScript files which runs on one single thread and attach
 
 <img width="510" alt="listenable-events" src="https://user-images.githubusercontent.com/20265633/37237883-9d3ab658-23e8-11e8-928b-372d1eedb4ec.PNG">
 
-Service worker only works on HTTPS, because service worker is very powerful, it can intercept any request so you want to make sure that this is server on a secure host and this power isn't abused. 
+Service worker only works on HTTPS, because service worker is very powerful, it can intercept any request so you want to make sure that this is server on a secure host and this power isn't abused.
+
+### Promises & Fetch API
+
+### Caching
+
+Caching with srvice workers —— providing **offline support** for our webapplication —— probably the main purpose of why we're using service workers. Occasions: poor connection (foorball game), no connection (elevator, underground), Lie-Fie (your phone displays it has a wifi connection but nah... especially in hotspots), etc. Offline support is offered by native apps (原生App) and that's what makes them more appreciated than traidtional web apps.
+
+Disk cache has a disadvantage that it's controlled by browser and you as developer has little control over it, thus can't rely on the files being there when need them, or tell which assets to cache which not to cache. That's where **Cache API** steps in.
+
+Cache API is a separate cache storage also lives in the browser but **managed by developer**. It holds key pairs where the key are HTTP requests you want to send, and the value is the respond you got back. (You do need to made the request successfully at least one time so that you got the response, otherwise you can't cache it.) Once you got the response, you can store it with the key (the request) and fetch it later on when you need to send that same request again but have no internet connection. Using **fetch event** in service worker is the key to intercept any request you wanna send, and with Cache API you have a complete network proxy living in service worker, which allows you to control if the request is allowed to continue to the network, or if you want to return a response from the cache if available.
+
+Cache API can be accessed from not only service worker but also normal JavaScript files. However to access from service worker is more powerful, because you don't need to fetch service worker when visit the page, service worker is a background process and already running even without internet connection. On the other hand normal JS files sit on the server and loaded via request and without internet connection they can't even be loaded.
+
+What to chache? Cache at least **App Shell** [[Document]](https://developers.google.com/web/fundamentals/architecture/app-shell). So first of all, find out what the app shell is (the core asset of your application that are visible on most pages, toolbar, basic styling, etc.) then pre-cache it during the installation of the service worker (static caching).
