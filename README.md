@@ -1,6 +1,6 @@
 # LiteGram
 
-A progressive web application that records and shares your life with the internet.
+A progressive web application (PWA) that records your life.
 
 ## PWA Basics
 
@@ -38,5 +38,15 @@ Cache API is a separate cache storage also lives in the browser but **managed by
 
 Cache API can be accessed from not only service worker but also normal JavaScript files. However to access from service worker is more powerful, because you don't need to fetch service worker when visit the page, service worker is a background process and already running even without internet connection. On the other hand normal JS files sit on the server and loaded via request and without internet connection they can't even be loaded.
 
-What to chache? Cache at least **App Shell** [[Document]](https://developers.google.com/web/fundamentals/architecture/app-shell). So first of all, find out what the app shell is (the core asset of your application that are visible on most pages, toolbar, basic styling, etc.) then **pre-cache** it during the installation of the service worker (static caching). Based on that, we can also **dynamically add files to cache** using different **caching strategies**.
+What to chache? Cache at least **App Shell** [[Document]](https://developers.google.com/web/fundamentals/architecture/app-shell). So first of all, find out what the app shell is (the core asset of your application that are visible on most pages, toolbar, basic styling, etc.) then **pre-cache** it during the installation of the service worker (static caching). Based on that, we can also make **dynamic caching** (dynamically add files to cache) using different **caching strategies**.
+
+Dynamic Caching vs Caching Dynamic Content: The approach is comparable (fetch data and store for retrieval in the future), but data nature and format is different.
+
+<img width="535" alt="dynamic-caching-vs-caching-dynamic-content" src="https://user-images.githubusercontent.com/20265633/37322950-12ce0ad0-2657-11e8-937a-cb592b631583.PNG">
+
+### Caching Dynamic Content with IndexedDB
+
+**indexedDB:** [[Document]](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API) A in-browser key-value database.
+
+### Creating s Responsive User Interface
 
