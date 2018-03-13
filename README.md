@@ -50,3 +50,17 @@ Dynamic Caching vs Caching Dynamic Content: The approach is comparable (fetch da
 
 ### Creating s Responsive User Interface
 
+```css
+/* default setup (mobile first) */
+.shared-moment-card.mdl-card {
+  margin: 10px auto;
+  width: 280px;
+}
+
+/* media query */
+@media (min-width: 600px) {
+  .shared-moment-card.mdl-card {
+    width: 400px;
+  }
+}
+```
