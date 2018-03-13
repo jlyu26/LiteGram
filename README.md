@@ -38,4 +38,5 @@ Cache API is a separate cache storage also lives in the browser but **managed by
 
 Cache API can be accessed from not only service worker but also normal JavaScript files. However to access from service worker is more powerful, because you don't need to fetch service worker when visit the page, service worker is a background process and already running even without internet connection. On the other hand normal JS files sit on the server and loaded via request and without internet connection they can't even be loaded.
 
-What to chache? Cache at least **App Shell** [[Document]](https://developers.google.com/web/fundamentals/architecture/app-shell). So first of all, find out what the app shell is (the core asset of your application that are visible on most pages, toolbar, basic styling, etc.) then pre-cache it during the installation of the service worker (static caching).
+What to chache? Cache at least **App Shell** [[Document]](https://developers.google.com/web/fundamentals/architecture/app-shell). So first of all, find out what the app shell is (the core asset of your application that are visible on most pages, toolbar, basic styling, etc.) then **pre-cache** it during the installation of the service worker (static caching). Based on that, we can also **dynamically add files to cache** using different **caching strategies**.
+
