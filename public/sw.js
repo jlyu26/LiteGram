@@ -1,7 +1,7 @@
 importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
-var CACHE_STATIC_NAME = 'static-v2';
+var CACHE_STATIC_NAME = 'static-v1';
 var CACHE_DYNAMIC_NAME = 'dynamic-v2';
 var STATIC_FILES = [
 	'/',
@@ -188,3 +188,42 @@ self.addEventListener('fetch', function(event) {
 // 			})
 // 	);
 // });
+
+self.addEventListener('sync', function(event) {
+	console.log('[Service Worker] Backgound syncing...', event);
+	if (event.tag === 'sync-new-posts') {	// post?
+		console.log('[Service Work] Syncing new posts...');
+		event.waitUntil(
+			readAllData('sync-posts')
+				.then(function(data) {
+					for (var dt of data) {
+						fetch('https://us-central1-litegram-268b1.cloudfunctions.net/storePostData', {
+						    method: 'POST',
+						    headers: {
+						        'Content-Type': 'application/json',
+						        'Accept': 'application/json'
+						    },
+						    body: JSON.stringify({
+						        id: dt.id,
+						        title: dt.title,
+						        location: dt.location,
+						        image: 'https://firebasestorage.googleapis.com/v0/b/litegram-268b1.appspot.com/o/sf-boat.jpg?alt=media&token=44b153b5-cc94-4100-95d6-b364353b6018'
+						    })
+						})
+						.then(function(res) {
+						    console.log('[Sent Data]', res);
+						    if (res.ok) {
+						    	res.json()
+						    		.then(function(resData) {
+						    			deleteItemFromData('sync-posts', resData.id);
+						    		});
+						    }
+						})
+						.catch(function(err) {
+							console.log('[Error while Dending Data]', err);
+						});
+					}	
+				})
+		);
+	}
+});

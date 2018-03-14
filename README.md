@@ -64,3 +64,15 @@ Dynamic Caching vs Caching Dynamic Content: The approach is comparable (fetch da
   }
 }
 ```
+
+### Background Synchronization
+
+[[SyncManager API]](https://developer.mozilla.org/en-US/docs/Web/API/SyncManager)
+
+When offline, it's good to store request and send the data at a later point of time. However on service worker we can't cache POST requests, we can cache the response but can't cache the request itself to be sent later on. 
+
+There's a technique we can use though. We can basically tell the service worker there's some data we eventually want to send, be aware of that and register it as a **synchronize task**. We also need to store the data (JSON, image, etc.) we want to send with the POST request in an indexedDB. If we always have internet, then the service worker will go ahead and execute the task immediately. If we don't have the internet, when the connection (re)established, it will also work. Sync event will be executed on service worker and we can listen to that event in the service worker. Once the event occurs, the service worker will follow our instruction to fetch the request data and send it to the server.
+
+The good thing is the process above will also work even if we close the tab or browser. And this make scence to register a certain task regardless of the internet connection is good, because it will still execute even if the user immediately closed the browser after hitting a button.
+
+<img width="481" alt="background-synchronization" src="https://user-images.githubusercontent.com/20265633/37376069-f1b9bf4a-26f8-11e8-9258-008c1f8b0af8.PNG">

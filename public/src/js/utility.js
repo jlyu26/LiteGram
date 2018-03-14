@@ -1,6 +1,9 @@
 var dbPromise = idb.open('posts-store', 1, function(db) {
-	if (!db.objectStoreNames.contains('posts')) {
+	if (!db.objectStoreNames.contains('posts')) {	// a store for caching posts we fetched from server
 		db.createObjectStore('posts', {keyPath: 'id'});
+	}
+	if (!db.objectStoreNames.contains('sync-posts')) {	// another store for synchromize tasks
+		db.createObjectStore('sync-posts', {keyPath: 'id'});
 	}	
 });
 
