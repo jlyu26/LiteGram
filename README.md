@@ -76,3 +76,27 @@ There's a technique we can use though. We can basically tell the service worker 
 The good thing is the process above will also work even if we close the tab or browser. And this make scence to register a certain task regardless of the internet connection is good, because it will still execute even if the user immediately closed the browser after hitting a button.
 
 <img width="481" alt="background-synchronization" src="https://user-images.githubusercontent.com/20265633/37376069-f1b9bf4a-26f8-11e8-9258-008c1f8b0af8.PNG">
+
+### Web Push Notifications
+
+This feature contains two parts: 1. server **push** information to application; 2. **show** notifications to the user. 
+
+First, we need to prompt for permission and let user to enable notifications. With that being done, we can display notifications to users. This process is independent from pushing notifications to app.
+
+Then it comes to the push part. When a new post is created, we can push this message to all web applications that **subscribed**[1] in our service. We can check if the user has already setup a subscription in the past, or otherwise create a new one, with a service worker. When we setup a new subscription, JavaScript will automatically reach out to the browser vendor **push server**[2] and fetch a **push API endpoint (a URL)** to which we can sed new push messages, so that the push server will then forward the message to our web application. Together with the endpoint information, a newly created subscription also hold some authentication information[3] to make sure only we can push information to our app. Also, we need a backend server databse[4] to store the subscription. 
+
+With all these established, after a post is created, we can issue an notification. The notification is sent to the browser vendor push server, and forwarded to subscription's service worker by triggering a push event there. Then service worker can display the notification in web app.
+
+[1] _A subscription refers to a **browser on a given device**. (E.g. if user use Chrome on Mac, he may subscribe with this browser-device combination to push, and if he use Firefox on the same Mac, he could setup a new subscription.)_
+
+[2] _Subscriptions for push notifications need external servers (push servers), because a push notification needs to be **delivered** to our web application with/via the help of browser, so that even the app is closed we still able to show a notification, and each browser vendor (Google, Mozilla, etc.) has it's own **push server**. WebSocket [[Wiki]](https://zh.wikipedia.org/wiki/WebSocket) only works when the app is open, so we can't use it to implement notification._
+
+[3] Use [[VAPID with WebPush]](https://blog.mozilla.org/services/2016/04/04/using-vapid-with-webpush/).
+
+[4] _In this server we also have a database to store posts._
+
+<img width="556" alt="web-push-notifications" src="https://user-images.githubusercontent.com/20265633/37432439-b3067606-27ae-11e8-9885-d39e21027204.PNG">
+
+[[Web Push Notifications Document]](https://developers.google.com/web/fundamentals/push-notifications/)
+
+### 
