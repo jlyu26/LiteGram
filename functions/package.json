@@ -11,9 +11,13 @@
     "web-push": "web-push"
   },
   "dependencies": {
+    "@google-cloud/storage": "^1.6.0",
+    "busboy": "^0.2.14",
     "cors": "^2.8.4",
     "firebase-admin": "^5.8.2",
     "firebase-functions": "^0.8.1",
+    "formidable": "^1.2.0",
+    "uuid-v4": "^0.1.0",
     "web-push": "^3.3.0"
   },
   "devDependencies": {

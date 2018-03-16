@@ -91,7 +91,7 @@ With all these established, after a post is created, we can issue an notificatio
 
 [2] _Subscriptions for push notifications need external servers (push servers), because a push notification needs to be **delivered** to our web application with/via the help of browser, so that even the app is closed we still able to show a notification, and each browser vendor (Google, Mozilla, etc.) has it's own **push server**. WebSocket [[Wiki]](https://zh.wikipedia.org/wiki/WebSocket) only works when the app is open, so we can't use it to implement notification._
 
-[3] Use [[VAPID with WebPush]](https://blog.mozilla.org/services/2016/04/04/using-vapid-with-webpush/).
+[3] _Use [[VAPID with WebPush]](https://blog.mozilla.org/services/2016/04/04/using-vapid-with-webpush/)._
 
 [4] _In this server we also have a database to store posts._
 
@@ -99,4 +99,5 @@ With all these established, after a post is created, we can issue an notificatio
 
 [[Web Push Notifications Document]](https://developers.google.com/web/fundamentals/push-notifications/)
 
-### 
+### Native Device Features (Camera and Geolocation)
+

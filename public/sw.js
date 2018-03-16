@@ -1,13 +1,14 @@
 importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
-var CACHE_STATIC_NAME = 'static-v2';
-var CACHE_DYNAMIC_NAME = 'dynamic-v2';
+var CACHE_STATIC_NAME = 'static-v1';
+var CACHE_DYNAMIC_NAME = 'dynamic-v1';
 var STATIC_FILES = [
 	'/',
 	'/index.html',
 	'/offline.html',
 	'/src/js/app.js',
+	'/src/js/utility.js',
 	'/src/js/feed.js',
 	'/src/js/idb.js',
 	'/src/js/promise.js',
@@ -197,18 +198,15 @@ self.addEventListener('sync', function(event) {
 			readAllData('sync-posts')
 				.then(function(data) {
 					for (var dt of data) {
+						var postData = new FormData();
+						postData.append('id', dt.id);
+						postData.append('title', dt.title);
+						postData.append('location', dt.location);
+						postData.append('file', dt.picture, dt.id + '.png');
+
 						fetch('https://us-central1-litegram-268b1.cloudfunctions.net/storePostData', {
 						    method: 'POST',
-						    headers: {
-						        'Content-Type': 'application/json',
-						        'Accept': 'application/json'
-						    },
-						    body: JSON.stringify({
-						        id: dt.id,
-						        title: dt.title,
-						        location: dt.location,
-						        image: 'https://firebasestorage.googleapis.com/v0/b/litegram-268b1.appspot.com/o/sf-boat.jpg?alt=media&token=44b153b5-cc94-4100-95d6-b364353b6018'
-						    })
+						    body: postData
 						})
 						.then(function(res) {
 						    console.log('[Sent Data]', res);
