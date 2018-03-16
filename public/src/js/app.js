@@ -8,7 +8,7 @@ if(!window.Promise) {
 // Check if the service worker feature is available in browser
 if ('serviceWorker' in navigator) {
 	navigator.serviceWorker
-		.register('/sw.js')
+		.register('/service-worker.js')
 		.then(function() {
 			console.log('Service worker registered!');
 		})

@@ -20,7 +20,7 @@ function getAddress(latitude, longitude) {
         var request = new XMLHttpRequest();
 
         var method = 'GET';
-        var url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' 
+        var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' 
             + latitude + ',' + longitude + '&sensor=true';
         var async = true;
 

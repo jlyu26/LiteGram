@@ -2,7 +2,23 @@
 
 A progressive web application (PWA) that records your life.
 
-## PWA Basics
+Screenshots：
+
+<img width="166" alt="screenshot" src="https://user-images.githubusercontent.com/20265633/37547521-8c163ffe-2948-11e8-8639-c1fdbb4b1ade.PNG">
+
+Lighthouse Score (Deployed on Google Firebase): [[Document]](https://developers.google.com/web/tools/lighthouse/)
+
+<img width="413" alt="lighthouse-score" src="https://user-images.githubusercontent.com/20265633/37547789-1299004c-294a-11e8-8d87-7998a2b11ae3.PNG">
+
+- Performance: 89/100
+- Progressive Web App: 100/100
+- Accessibility: 97/100
+- Best Practice: 94/100
+- SEO: 78/100
+
+Full score report: [[click]](/litegram-268b1.firebaseapp.com-20180316T184047.json)
+
+## Challenges
 
 ### What are Progressive Web Apps (PWAs)?
 
@@ -101,3 +117,4 @@ With all these established, after a post is created, we can issue an notificatio
 
 ### Native Device Features (Camera and Geolocation)
 
+### Automatic Service Worker Management with Workbox
