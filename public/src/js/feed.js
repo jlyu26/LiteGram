@@ -11,6 +11,42 @@ var captureButton = document.querySelector('#capture-btn');
 var imagePicker = document.querySelector('#image-picker');
 var imagePickerArea = document.querySelector('#pick-image');
 var picture;
+var locationBtn = document.querySelector('#location-btn');
+var locationLoader = document.querySelector('#location-loader');
+var fetchedLocation = { lat: 0, lng: 0 };
+
+locationBtn.addEventListener('click', function(event) {
+    if (!('geolocation' in navigator)) {
+        return;
+    }
+    var sawAlert = false;
+
+    locationBtn.style.display = 'none';
+    locationBtn.style.display = 'block';
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+        locationBtn.style.display = 'inline';
+        locationLoader.style.display = 'none';
+        fetchedLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+        locationInput.value = 'Worcester, MA';
+        document.querySelector('#manual-location').classList.add('is-focused');
+    }, function(err) {
+        console.log(err);
+        locationBtn.style.display = 'inline';
+        locationLoader.style.display = 'none';
+        if (!sawAlert) {
+            alert('Location not available, please enter manually :|');
+            sawAlert = true;
+        }
+        fetchedLocation = { lat: 0, lng: 0 };
+    }, {timeout: 7000});
+});
+
+function initializeLocation() {
+    if (!('geolocation' in navigator)) {
+        locationBtn.style.display = 'none';
+    }
+}
 
 function initializeMedia() {
     if (!'mediaDevices' in navigator) {
@@ -59,10 +95,11 @@ imagePicker.addEventListener('change', function(event) {
 
 function openCreatePostModal() {
     // createPostArea.style.display = 'block';
-    // setTimeout(function() {
+    setTimeout(function() {
         createPostArea.style.transform = 'translateY(0)';
-        initializeMedia();
-    // }, 1);
+    }, 1);
+    initializeMedia();
+    initializeLocation();
     if (deferredPrompt) {
         deferredPrompt.prompt();
 
@@ -90,11 +127,21 @@ function openCreatePostModal() {
     // }
 }
 
-function closeCreatePostModal() {
-    createPostArea.style.transform = 'translateY(100vh)';
+function closeCreatePostModal() {    
     imagePickerArea.style.display = 'none';
     videoPlayer.style.display = 'none';
     canvasElement.style.display = 'none';
+    locationBtn.style.display = 'inline';
+    locationLoader.style.display = 'none';
+    captureButton.style.display = 'inline';
+    if (videoPlayer.srcObject) {
+        videoPlayer.srcObject.getVideoTracks().forEach(function(track) {
+            track.stop();
+        });
+    }
+    setTimeout(function() {
+        createPostArea.style.transform = 'translateY(100vh)';
+    }, 1)
     // createPostArea.style.display = 'none';
 }
 
@@ -209,6 +256,8 @@ function sendData() {   // Directly send data to back-end without using syncroni
     postData.append('id', id);
     postData.append('title', titleInput.value);
     postData.append('location', locationInput.value);
+    postData.append('rawLocationLat', fetchedLocation.lat);
+    postData.append('rawLocationLng', fetchedLocation.lng);
     postData.append('file', picture, id + '.png');
 
     fetch('https://us-central1-litegram-268b1.cloudfunctions.net/storePostData', {
@@ -238,7 +287,8 @@ form.addEventListener('submit', function(event) {
                     id: new Date().toISOString(),
                     title: titleInput.value,
                     location: locationInput.value,
-                    picture: picture
+                    picture: picture,
+                    rawLocation: fetchedLocation
                 };
                 writeData('sync-posts', post)
                     .then(function() {

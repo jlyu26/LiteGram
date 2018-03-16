@@ -1,7 +1,7 @@
 importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
-var CACHE_STATIC_NAME = 'static-v1';
+var CACHE_STATIC_NAME = 'static-v2';
 var CACHE_DYNAMIC_NAME = 'dynamic-v1';
 var STATIC_FILES = [
 	'/',
@@ -202,6 +202,8 @@ self.addEventListener('sync', function(event) {
 						postData.append('id', dt.id);
 						postData.append('title', dt.title);
 						postData.append('location', dt.location);
+						postData.append('rawLocationLat', dt.rawLocation.lat);
+						postData.append('rawLocationLng', dt.rawLocation.lng);
 						postData.append('file', dt.picture, dt.id + '.png');
 
 						fetch('https://us-central1-litegram-268b1.cloudfunctions.net/storePostData', {
@@ -218,7 +220,7 @@ self.addEventListener('sync', function(event) {
 						    }
 						})
 						.catch(function(err) {
-							console.log('[Error while Dending Data]', err);
+							console.log('[Error while Sending Data]', err);
 						});
 					}	
 				})
