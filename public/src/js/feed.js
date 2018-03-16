@@ -15,6 +15,32 @@ var locationBtn = document.querySelector('#location-btn');
 var locationLoader = document.querySelector('#location-loader');
 var fetchedLocation = { lat: 0, lng: 0 };
 
+function getAddress(latitude, longitude) {
+    return new Promise(function (resolve, reject) {
+        var request = new XMLHttpRequest();
+
+        var method = 'GET';
+        var url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' 
+            + latitude + ',' + longitude + '&sensor=true';
+        var async = true;
+
+        request.open(method, url, async);
+        request.onreadystatechange = function () {
+            if (request.readyState == 4) {
+                if (request.status == 200) {
+                    var data = JSON.parse(request.responseText);
+                    var address = data.results[0];
+                    resolve(address);
+                }
+                else {
+                    reject(request.status);
+                }
+            }
+        };
+        request.send();
+    });
+};
+
 locationBtn.addEventListener('click', function(event) {
     if (!('geolocation' in navigator)) {
         return;
@@ -28,8 +54,19 @@ locationBtn.addEventListener('click', function(event) {
         locationBtn.style.display = 'inline';
         locationLoader.style.display = 'none';
         fetchedLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
-        locationInput.value = 'Worcester, MA';
+        // locationInput.value = 'Massachusetts, United States';
         document.querySelector('#manual-location').classList.add('is-focused');
+        getAddress(position.coords.latitude, position.coords.longitude)
+            .then(function(addr) {
+                var cityStateCountry = addr.address_components[3].long_name + ', ' 
+                    + addr.address_components[5].short_name + ', ' 
+                    + addr.address_components[6].long_name;
+                locationInput.value = cityStateCountry;
+                console.log(cityStateCountry);
+            })
+            .catch(function(err){
+                console.log(err);
+            });
     }, function(err) {
         console.log(err);
         locationBtn.style.display = 'inline';
